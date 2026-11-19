@@ -1,0 +1,530 @@
+<title>Sub-Roga</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: app de trabalho com barra superior fixa; três telas (cliente, lista de casos, caso) trocadas pelo hash */
+:root {
+  --bg: #eef2f4;
+  --panel: #ffffff;
+  --ink: #16212a;
+  --muted: #5a6873;
+  --line: #d4dce2;
+  --accent: #0f5c6e;
+  --accent-soft: #e0eef1;
+  --ok: #2f6f3e; --ok-soft: #e3f1e6;
+  --warn: #935700; --warn-soft: #fbefd9;
+  --bad: #a3282c; --bad-soft: #f8e3e3;
+  --bar: #0f2a33; --bar-ink: #e6f0f2;
+  --font-display: "Source Serif 4", Georgia, serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #10171b; --panel: #172128; --ink: #e3eaee; --muted: #98a7b2; --line: #2b3842;
+    --accent: #6cc3d3; --accent-soft: #163339; --ok: #7fcf92; --ok-soft: #1a3322;
+    --warn: #f0b456; --warn-soft: #3a2b12; --bad: #f08a8d; --bad-soft: #3d1c1e;
+    --bar: #0a1316; --bar-ink: #dbe7ea; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #10171b; --panel: #172128; --ink: #e3eaee; --muted: #98a7b2; --line: #2b3842;
+  --accent: #6cc3d3; --accent-soft: #163339; --ok: #7fcf92; --ok-soft: #1a3322;
+  --warn: #f0b456; --warn-soft: #3a2b12; --bad: #f08a8d; --bad-soft: #3d1c1e;
+  --bar: #0a1316; --bar-ink: #dbe7ea; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 14.5px; line-height: 1.5; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bar); }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bar); color: var(--bar-ink); }
+.topbar .in {
+  max-width: 1280px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 10px;
+}
+.brand { font-family: var(--font-display); font-size: 20px; font-weight: 600; letter-spacing: .01em; display: flex; align-items: baseline; gap: 8px; }
+.brand small { font-family: var(--font-mono); font-size: 11px; opacity: .7; letter-spacing: .06em; text-transform: uppercase; }
+nav { display: flex; gap: 4px; flex-wrap: wrap; margin-left: auto; }
+nav a { color: var(--bar-ink); text-decoration: none; padding: 6px 12px; border-radius: 4px; font-size: 13.5px; opacity: .8; }
+nav a:hover { opacity: 1; background: rgba(255,255,255,.08); }
+nav a[aria-current="page"] { opacity: 1; background: rgba(255,255,255,.14); }
+.demo-flag { font-family: var(--font-mono); font-size: 11px; padding: 2px 8px; border: 1px solid currentColor; border-radius: 3px; opacity: .7; }
+
+main {
+  max-width: 1280px; margin: 0 auto; display: grid; gap: 20px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 24px 64px;
+}
+h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(24px, 3.4vw, 32px); line-height: 1.15; margin: 0; text-wrap: balance; }
+h2 { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0; }
+.sub { color: var(--muted); margin: 0; max-width: 70ch; }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 16px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.spacer { flex: 1; }
+
+.btn { border: 1px solid var(--line); background: var(--panel); padding: 8px 14px; border-radius: 4px; cursor: pointer; font-weight: 500; white-space: nowrap; text-decoration: none; display: inline-block; }
+.btn:hover { border-color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--panel); }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn.small { padding: 4px 10px; font-size: 13px; }
+
+.pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 2px 9px; border-radius: 999px; white-space: nowrap; }
+.pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.p-ok { background: var(--ok-soft); color: var(--ok); }
+.p-warn { background: var(--warn-soft); color: var(--warn); }
+.p-bad { background: var(--bad-soft); color: var(--bad); }
+.p-acc { background: var(--accent-soft); color: var(--accent); }
+.p-mut { background: var(--bg); color: var(--muted); }
+
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); }
+table { width: 100%; border-collapse: collapse; min-width: 760px; }
+th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+th { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; background: var(--bg); }
+tr:last-child td { border-bottom: 0; }
+tbody tr.link { cursor: pointer; }
+tbody tr.link:hover td { background: var(--accent-soft); }
+tbody tr.off td { color: var(--muted); }
+.sev { width: 4px; padding: 0; }
+.sev.bad { background: var(--bad); } .sev.warn { background: var(--warn); } .sev.ok { background: transparent; }
+
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+.kpi { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 12px 16px; }
+.kpi b { display: block; font-family: var(--font-mono); font-size: 24px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.kpi span { color: var(--muted); font-size: 13px; }
+
+.newcase { border: 1px dashed var(--accent); background: var(--accent-soft); }
+.linkbox { display: flex; gap: 8px; flex-wrap: wrap; }
+.linkbox input { flex: 1 1 280px; min-width: 0; padding: 8px 10px; border: 1px solid var(--line); border-radius: 4px; background: var(--panel); font-family: var(--font-mono); font-size: 13px; }
+
+.casehead { display: grid; gap: 6px; }
+.meta { display: flex; flex-wrap: wrap; gap: 6px 18px; color: var(--muted); font-size: 13.5px; }
+.cols { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr) minmax(0, .9fr); gap: 16px; align-items: start; }
+@media (max-width: 1080px) { .cols { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .cols > :last-child { grid-column: 1 / -1; } }
+@media (max-width: 720px) { .cols { grid-template-columns: minmax(0, 1fr); } }
+
+.doc { display: grid; grid-template-columns: 58px minmax(0, 1fr); gap: 10px; padding: 10px 0; border-top: 1px solid var(--line); }
+.doc:first-of-type { border-top: 0; }
+.doc .n { font-family: var(--font-mono); font-size: 12.5px; color: var(--accent); font-weight: 500; padding-top: 2px; }
+.doc .t { font-weight: 600; }
+.doc .f { font-size: 12.5px; color: var(--muted); font-family: var(--font-mono); overflow-wrap: anywhere; }
+.doc .ctl { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 6px; }
+.doc select { padding: 4px 8px; border: 1px solid var(--line); border-radius: 4px; background: var(--panel); max-width: 100%; font-size: 13px; }
+.doc.low { background: linear-gradient(90deg, var(--warn-soft), transparent 70%); margin-inline: -16px; padding-inline: 16px; }
+.doc.low select { border-color: var(--warn); }
+
+.facts { display: grid; gap: 10px; }
+.fact { display: grid; gap: 3px; }
+.fact label { font-size: 12px; color: var(--muted); font-weight: 500; }
+.fact input { padding: 7px 9px; border: 1px solid var(--line); border-radius: 4px; background: var(--panel); min-width: 0; width: 100%; }
+.fact input:focus { border-color: var(--accent); }
+.src { font-size: 11.5px; color: var(--accent); font-family: var(--font-mono); background: none; border: 0; padding: 0; cursor: pointer; text-align: left; }
+.src:hover { text-decoration: underline; }
+.fact.conflict input { border-color: var(--warn); background: var(--warn-soft); }
+
+.alert { border-radius: 5px; padding: 10px 12px; display: grid; gap: 4px; font-size: 13.5px; }
+.alert b { font-size: 13.5px; }
+.a-bad { background: var(--bad-soft); color: var(--bad); }
+.a-warn { background: var(--warn-soft); color: var(--warn); }
+.a-ok { background: var(--ok-soft); color: var(--ok); }
+.alert .btn { justify-self: start; margin-top: 4px; }
+.check { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.check li { display: flex; gap: 8px; align-items: baseline; font-size: 13.5px; }
+.check .mk { font-family: var(--font-mono); width: 16px; flex: none; text-align: center; font-weight: 600; }
+.check .yes .mk { color: var(--ok); } .check .no .mk { color: var(--bad); } .check .no { color: var(--bad); }
+.actions { display: grid; gap: 8px; }
+.actions .btn { width: 100%; text-align: center; }
+
+.client { max-width: 760px; width: 100%; margin: 0 auto; display: grid; gap: 18px; }
+.drop { border: 2px dashed var(--line); border-radius: 8px; background: var(--panel); padding: 32px 16px; text-align: center; display: grid; gap: 8px; justify-items: center; cursor: pointer; transition: border-color .15s, background .15s; }
+.drop:hover, .drop.over { border-color: var(--accent); background: var(--accent-soft); }
+.drop b { font-size: 16px; }
+.drop span { color: var(--muted); font-size: 13.5px; }
+.files { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.files li { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; display: grid; gap: 6px; }
+.files .top { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.files .nm { font-family: var(--font-mono); font-size: 13px; overflow-wrap: anywhere; flex: 1 1 200px; min-width: 0; }
+.bar { height: 4px; background: var(--bg); border-radius: 2px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--accent); width: 0; transition: width .4s; }
+.found { font-size: 13px; color: var(--muted); }
+select.field { padding: 8px 10px; border: 1px solid var(--line); border-radius: 4px; background: var(--panel); }
+
+.overlay { position: fixed; inset: 0; background: rgba(10, 20, 25, .55); z-index: 20; display: grid; place-items: center; padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+.sheet { background: var(--panel); color: var(--ink); width: min(820px, 100%); max-height: 100%; overflow: auto; border-radius: 8px; display: grid; }
+.sheet-head { position: sticky; top: 0; background: var(--panel); border-bottom: 1px solid var(--line); padding: 12px 16px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.sheet-body { padding: 24px clamp(16px, 5vw, 56px) 40px; display: grid; gap: 14px; }
+.paper { font-family: var(--font-display); font-size: 15.5px; line-height: 1.7; display: grid; gap: 12px; }
+.paper h3 { font-family: var(--font-body); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; margin: 8px 0 0; }
+.paper p { margin: 0; text-align: justify; }
+.rev { background: var(--warn-soft); color: var(--warn); font-family: var(--font-mono); font-size: 12.5px; padding: 0 4px; border-radius: 3px; }
+.var { background: var(--accent-soft); border-radius: 2px; padding: 0 2px; }
+.idx { width: 100%; border-collapse: collapse; min-width: 0; font-size: 14px; }
+.idx td { padding: 6px 0; border-bottom: 1px dotted var(--line); }
+.idx td:last-child { text-align: right; font-family: var(--font-mono); white-space: nowrap; padding-left: 12px; }
+.idx td:first-child { font-family: var(--font-mono); color: var(--accent); width: 76px; }
+
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); background: var(--bar); color: var(--bar-ink); padding: 10px 16px; border-radius: 5px; z-index: 30; font-size: 14px; max-width: calc(100% - 32px); }
+.note { font-size: 12.5px; color: var(--muted); }
+a.note { text-decoration: none; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<header class="topbar">
+  <div class="in">
+    <div class="brand">Sub-Roga <small>regressivas</small></div>
+    <span class="demo-flag">protótipo · dados fictícios</span>
+    <nav>
+      <a href="#cliente" data-view="cliente">Envio do cliente</a>
+      <a href="#casos" data-view="casos">Casos</a>
+      <a href="#caso" data-view="caso">Caso 2025-0418</a>
+    </nav>
+  </div>
+</header>
+
+<main id="app"></main>
+<div id="overlay" class="overlay" hidden></div>
+<div id="toast" class="toast" hidden></div>
+
+<script>
+const TYPES = [
+  ["PROCURACAO", "Procuração"],
+  ["DOCS_SEGURADORA", "Docs. da seguradora"],
+  ["APOLICE", "Apólice"],
+  ["AVISO_SINISTRO", "Aviso de sinistro"],
+  ["BOLETIM_OCORRENCIA", "Boletim de ocorrência"],
+  ["LAUDO_TECNICO", "Laudo técnico"],
+  ["ORCAMENTO_NF_REPARO", "Orçamentos e NFs"],
+  ["FOTOS", "Fotos"],
+  ["COMPROVANTE_PAGAMENTO", "Comprovante de pagamento"],
+  ["TERMO_QUITACAO_SUBROGACAO", "Termo de quitação e sub-rogação"],
+  ["DOCS_TRANSPORTE", "Docs. de transporte"],
+  ["DOCS_VEICULO_CONDUTOR", "Docs. do veículo e condutor"],
+  ["RECLAMACAO_ADMINISTRATIVA", "Reclamação administrativa"],
+  ["OUTROS", "Outros / não identificado"]
+];
+const LABEL = Object.fromEntries(TYPES);
+const ORDER = Object.fromEntries(TYPES.map(([k], i) => [k, i]));
+const SCEN = { AUTO: "Auto (colisão)", ELETRICO: "Danos elétricos", TRANSPORTE: "Transporte de carga" };
+const CHECK = {
+  comum: ["PROCURACAO", "APOLICE", "AVISO_SINISTRO", "COMPROVANTE_PAGAMENTO", "TERMO_QUITACAO_SUBROGACAO"],
+  AUTO: ["BOLETIM_OCORRENCIA", "ORCAMENTO_NF_REPARO"],
+  ELETRICO: ["LAUDO_TECNICO", "ORCAMENTO_NF_REPARO"],
+  TRANSPORTE: ["DOCS_TRANSPORTE"]
+};
+const required = s => [...CHECK.comum, ...CHECK[s]];
+
+const kase = {
+  id: "2025-0418",
+  scenario: "AUTO",
+  docs: [
+    { id: 1, type: "PROCURACAO", title: "Procuração ad judicia", file: "procuracao_assinada.pdf", pages: 1, conf: .98 },
+    { id: 2, type: "APOLICE", title: "Apólice 1031.22.004871 + condições gerais", file: "apolice.pdf", pages: 6, conf: .97 },
+    { id: 3, type: "AVISO_SINISTRO", title: "Aviso de sinistro nº 2025-0418", file: "scan001.pdf · p. 1–2", pages: 2, conf: .93 },
+    { id: 4, type: "BOLETIM_OCORRENCIA", title: "B.O. 4471/2025, 3º DP de Campinas", file: "scan001.pdf · p. 3–5", pages: 3, conf: .91 },
+    { id: 5, type: "ORCAMENTO_NF_REPARO", title: "Orçamento Oficina Centro + NF 8812", file: "doc final (2).pdf", pages: 4, conf: .88 },
+    { id: 6, type: "FOTOS", title: "Registro fotográfico do veículo", file: "fotos_carro.pdf", pages: 8, conf: .95 },
+    { id: 7, type: "COMPROVANTE_PAGAMENTO", title: "TED da indenização", file: "comprovante TED.pdf", pages: 1, conf: .96 },
+    { id: 8, type: "OUTROS", title: "Recibo com texto de quitação (ilegível em parte)", file: "scan001.pdf · p. 6", pages: 1, conf: .41 }
+  ],
+  facts: {
+    seguradora: { label: "Seguradora (autora)", v: "Atlântica Seguros S.A.", src: 1 },
+    segurado: { label: "Segurado", v: "Marcos Vieira Lopes", src: 2 },
+    apolice: { label: "Nº da apólice", v: "1031.22.004871", src: 2 },
+    sinistro: { label: "Nº do sinistro", v: "2025-0418", src: 3 },
+    data_sinistro: { label: "Data do sinistro", v: "2023-11-28", type: "date", src: 4 },
+    local: { label: "Local", v: "Av. Norte-Sul, 1200, Campinas/SP", src: 4 },
+    causador: { label: "Causador (réu)", v: "Transportes Rodaviva Ltda.", src: 4 },
+    cnpj: { label: "CNPJ do causador", v: "00.000.000/0001-00", src: 4 },
+    valor: { label: "Valor pago (R$)", v: "48.320,00", src: 7, conflict: "No orçamento aprovado consta R$ 48.230,00." },
+    data_pag: { label: "Data do pagamento", v: "2024-01-15", type: "date", src: 7 }
+  },
+  conflictOk: false
+};
+
+const others = [
+  { id: "2025-0402", seg: "Atlântica Seguros", reu: "Cia. Paulista de Força e Luz", sc: "ELETRICO", st: ["Pronto", "p-ok"], days: 640, docs: "7/7", link: false },
+  { id: "2025-0411", seg: "Mareal Seguros", reu: "Expresso Serra Azul", sc: "TRANSPORTE", st: ["Pendente", "p-warn"], days: 410, docs: "5/6", link: false },
+  { id: "2025-0425", seg: "Atlântica Seguros", reu: "J. R. Almeida (condutor)", sc: "AUTO", st: ["Processando", "p-acc"], days: 980, docs: "—", link: false },
+  { id: "2025-0430", seg: "Vértice Seguros", reu: "Energisul Distribuidora", sc: "ELETRICO", st: ["Recebendo", "p-mut"], days: 1012, docs: "2/7", link: false }
+];
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const brDate = iso => { if (!iso) return "—"; const [y, m, d] = iso.split("-"); return `${d}/${m}/${y}`; };
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(() => t.hidden = true, 2600); }
+
+function sortedDocs() { return [...kase.docs].sort((a, b) => ORDER[a.type] - ORDER[b.type] || a.id - b.id); }
+function docNum(id) { const i = sortedDocs().findIndex(d => d.id === id); return "Doc. " + String(i + 1).padStart(2, "0"); }
+function prescription() {
+  const p = kase.facts.data_pag.v; if (!p) return null;
+  const [y, m, d] = p.split("-").map(Number);
+  const lim = new Date(y + 3, m - 1, d);
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  return { lim, days: Math.round((lim - today) / 864e5) };
+}
+function missing() { const have = new Set(kase.docs.map(d => d.type)); return required(kase.scenario).filter(t => !have.has(t)); }
+function caseStatus() {
+  const miss = missing().length, low = kase.docs.some(d => d.conf < .7 && !d.fixed);
+  if (miss) return ["Pendente", "p-warn"];
+  if (low || !kase.conflictOk) return ["Revisar", "p-acc"];
+  return ["Pronto", "p-ok"];
+}
+
+function viewCasos() {
+  const pr = prescription();
+  const rows = [
+    { id: kase.id, seg: kase.facts.seguradora.v, reu: kase.facts.causador.v, sc: kase.scenario, st: caseStatus(), days: pr ? pr.days : null, docs: `${required(kase.scenario).length - missing().length}/${required(kase.scenario).length}`, link: true },
+    ...others
+  ].sort((a, b) => (a.days ?? 9e9) - (b.days ?? 9e9));
+  const urgent = rows.filter(r => r.days !== null && r.days < 90).length;
+  return `
+  <div class="row"><div style="display:grid;gap:4px;min-width:0"><h1>Casos de regressiva</h1>
+    <p class="sub">Ordenados pelo prazo de prescrição. Clique no caso 2025-0418 para abrir a revisão.</p></div>
+    <span class="spacer"></span><button class="btn primary" id="newCase">Novo caso</button></div>
+  <div id="newBox"></div>
+  <div class="kpis">
+    <div class="kpi"><b>${rows.length}</b><span>casos em andamento</span></div>
+    <div class="kpi"><b style="color:var(--bad)">${urgent}</b><span>prescrevem em menos de 90 dias</span></div>
+    <div class="kpi"><b>${rows.filter(r => r.st[0] === "Pendente").length}</b><span>aguardando documento do cliente</span></div>
+    <div class="kpi"><b>${rows.filter(r => r.st[0] === "Pronto").length}</b><span>prontos para protocolo</span></div>
+  </div>
+  <div class="table-wrap"><table>
+    <thead><tr><th class="sev"></th><th>Caso</th><th>Seguradora</th><th>Réu</th><th>Cenário</th><th>Checklist</th><th>Status</th><th>Prescrição</th></tr></thead>
+    <tbody>${rows.map(r => {
+      const sev = r.days !== null && r.days < 90 ? "bad" : r.days !== null && r.days < 365 ? "warn" : "ok";
+      const pz = r.days === null ? "—" : r.days < 0 ? `<span class="pill p-bad">vencida</span>` : `<span class="pill ${sev === "bad" ? "p-bad" : sev === "warn" ? "p-warn" : "p-mut"}">${r.days} dias</span>`;
+      return `<tr class="${r.link ? "link" : "off"}" ${r.link ? 'data-go="caso" tabindex="0"' : 'title="Neste protótipo, só o caso 2025-0418 abre."'}>
+        <td class="sev ${sev}"></td><td class="mono">${r.id}</td><td>${esc(r.seg)}</td><td>${esc(r.reu)}</td>
+        <td>${SCEN[r.sc]}</td><td class="mono">${r.docs}</td><td><span class="pill ${r.st[1]}">${r.st[0]}</span></td><td>${pz}</td></tr>`;
+    }).join("")}</tbody></table></div>`;
+}
+function bindCasos() {
+  document.querySelectorAll("tr[data-go]").forEach(tr => {
+    tr.onclick = () => location.hash = "caso";
+    tr.onkeydown = e => { if (e.key === "Enter") location.hash = "caso"; };
+  });
+  $("#newCase").onclick = () => {
+    const tok = Math.random().toString(36).slice(2, 10);
+    $("#newBox").innerHTML = `<div class="panel newcase">
+      <h2>Novo caso criado</h2>
+      <div class="row"><label for="ncScen">Cenário</label>
+        <select id="ncScen" class="field">${Object.entries(SCEN).map(([k, v]) => `<option value="${k}">${v}</option>`).join("")}</select></div>
+      <div class="linkbox"><input id="ncLink" readonly value="https://sub-roga.app/enviar/${tok}"><button class="btn" id="ncCopy">Copiar link</button><a class="btn" href="#cliente">Ver como o cliente</a></div>
+      <span class="note">Mande este link ao cliente. Ele sobe os PDFs sem precisar de login. O link expira em 30 dias.</span></div>`;
+    $("#ncCopy").onclick = async () => {
+      try { await navigator.clipboard.writeText($("#ncLink").value); toast("Link copiado"); }
+      catch { $("#ncLink").select(); toast("Selecionei o link. Use Ctrl+C para copiar."); }
+    };
+  };
+}
+
+function viewCaso() {
+  const f = kase.facts, pr = prescription(), miss = missing(), st = caseStatus();
+  const docs = sortedDocs();
+  const req = required(kase.scenario), have = new Set(kase.docs.map(d => d.type));
+  return `
+  <div class="casehead">
+    <div class="row"><a href="#casos" class="note">← Casos</a></div>
+    <div class="row"><h1>${esc(f.seguradora.v)} × ${esc(f.causador.v)}</h1><span class="pill ${st[1]}">${st[0]}</span></div>
+    <div class="meta"><span class="mono">Sinistro ${esc(f.sinistro.v)}</span><span>${SCEN[kase.scenario]}</span><span>Segurado: ${esc(f.segurado.v)}</span><span>${kase.docs.length} documentos · ${kase.docs.reduce((s, d) => s + d.pages, 0)} páginas</span></div>
+  </div>
+  <div class="cols">
+    <section class="panel" aria-label="Documentos">
+      <div class="row"><h2>Documentos detectados</h2><span class="spacer"></span><span class="note">ordem automática pelo tipo</span></div>
+      <div id="docs">${docs.map((d, i) => `
+        <div class="doc ${d.conf < .7 && !d.fixed ? "low" : ""}" id="doc-${d.id}">
+          <div class="n">Doc. ${String(i + 1).padStart(2, "0")}</div>
+          <div style="min-width:0">
+            <div class="t">${esc(d.title)}</div>
+            <div class="f">${esc(d.file)} · ${d.pages} p.</div>
+            <div class="ctl">
+              <select data-doc="${d.id}" aria-label="Tipo do documento ${i + 1}">${TYPES.map(([k, v]) => `<option value="${k}" ${k === d.type ? "selected" : ""}>${v}</option>`).join("")}</select>
+              ${d.fixed ? `<span class="pill p-ok">conferido</span>` : d.conf < .7 ? `<span class="pill p-warn">confiança ${Math.round(d.conf * 100)}%: revisar</span>` : `<span class="pill p-mut">confiança ${Math.round(d.conf * 100)}%</span>`}
+            </div>
+          </div>
+        </div>`).join("")}</div>
+    </section>
+
+    <section class="panel" aria-label="Dados extraídos">
+      <h2>Dados extraídos</h2>
+      <div class="facts">${Object.entries(f).map(([k, x]) => {
+        const d = kase.docs.find(d => d.id === x.src);
+        return `<div class="fact ${x.conflict && !kase.conflictOk ? "conflict" : ""}">
+          <label for="f-${k}">${x.label}</label>
+          <input id="f-${k}" data-fact="${k}" type="${x.type || "text"}" value="${esc(x.v)}">
+          ${d ? `<button class="src" data-src="${d.id}">fonte: ${docNum(d.id)} · ${esc(d.file)}</button>` : ""}
+        </div>`;
+      }).join("")}</div>
+    </section>
+
+    <section class="panel" aria-label="Conferência">
+      <h2>Conferência</h2>
+      ${pr ? `<div class="alert ${pr.days < 90 ? "a-bad" : pr.days < 365 ? "a-warn" : "a-ok"}">
+        <b>Prescrição: ${pr.days < 0 ? "vencida" : pr.days + " dias restantes"}</b>
+        <span>3 anos a partir do pagamento (${brDate(f.data_pag.v)}). Limite: ${pr.lim.toLocaleDateString("pt-BR")}.</span></div>` : ""}
+      ${miss.length ? `<div class="alert a-bad"><b>Falta ${miss.length === 1 ? "1 documento obrigatório" : miss.length + " documentos obrigatórios"}</b>
+        <span>${miss.map(m => LABEL[m]).join(", ")}.</span>
+        <span>Dica: o documento 8 parece ser o termo. Mude o tipo dele para conferir.</span>
+        <button class="btn small" id="askClient">Pedir ao cliente</button></div>` : ""}
+      ${!kase.conflictOk ? `<div class="alert a-warn"><b>Valores divergentes</b><span>${esc(f.valor.conflict)} O comprovante diz R$ ${esc(f.valor.v)}.</span>
+        <button class="btn small" id="okConflict">Conferi, manter R$ ${esc(f.valor.v)}</button></div>` : ""}
+      <h2>Checklist · ${SCEN[kase.scenario]}</h2>
+      <ul class="check">${req.map(t => `<li class="${have.has(t) ? "yes" : "no"}"><span class="mk">${have.has(t) ? "✓" : "✕"}</span>${LABEL[t]}</li>`).join("")}</ul>
+      <div class="actions">
+        <button class="btn primary" id="genPdf">Gerar dossiê PDF</button>
+        <button class="btn" id="genDoc">Gerar minuta da petição</button>
+        ${miss.length ? `<span class="note">Você pode gerar agora. O que falta fica sinalizado na minuta.</span>` : ""}
+      </div>
+    </section>
+  </div>`;
+}
+function bindCaso() {
+  document.querySelectorAll("select[data-doc]").forEach(s => s.onchange = () => {
+    const d = kase.docs.find(d => d.id === +s.dataset.doc);
+    d.type = s.value; d.fixed = true;
+    if (s.value === "TERMO_QUITACAO_SUBROGACAO") d.title = "Termo de quitação com sub-rogação";
+    render(); toast(`Tipo alterado para "${LABEL[s.value]}". Numeração refeita.`);
+  });
+  document.querySelectorAll("input[data-fact]").forEach(i => i.onchange = () => {
+    kase.facts[i.dataset.fact].v = i.value; render();
+  });
+  document.querySelectorAll(".src").forEach(b => b.onclick = () => {
+    const el = document.getElementById("doc-" + b.dataset.src);
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+    el.animate([{ backgroundColor: "var(--accent-soft)" }, { backgroundColor: "transparent" }], { duration: 1400 });
+  });
+  const ask = $("#askClient"); if (ask) ask.onclick = () => toast("Lista do que falta enviada ao cliente pelo mesmo link.");
+  const ok = $("#okConflict"); if (ok) ok.onclick = () => { kase.conflictOk = true; render(); };
+  $("#genPdf").onclick = showDossie;
+  $("#genDoc").onclick = showPeticao;
+}
+
+function openSheet(title, body) {
+  const o = $("#overlay");
+  o.innerHTML = `<div class="sheet" role="dialog" aria-modal="true" aria-label="${esc(title)}">
+    <div class="sheet-head"><b class="mono">${esc(title)}</b><span class="spacer"></span>
+      <span class="note">No produto, este arquivo é baixado.</span><button class="btn small" id="closeSheet">Fechar</button></div>
+    <div class="sheet-body">${body}</div></div>`;
+  o.hidden = false; $("#closeSheet").focus();
+  $("#closeSheet").onclick = closeSheet;
+  o.onclick = e => { if (e.target === o) closeSheet(); };
+}
+function closeSheet() { $("#overlay").hidden = true; }
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeSheet(); });
+
+function showDossie() {
+  const docs = sortedDocs(); let fl = 3;
+  const rows = docs.map((d, i) => { const r = `<tr><td>Doc. ${String(i + 1).padStart(2, "0")}</td><td>${LABEL[d.type]}: ${esc(d.title)}</td><td>fls. ${fl}–${fl + d.pages}</td></tr>`; fl += d.pages + 1; return r; }).join("");
+  const f = kase.facts;
+  openSheet(`dossie_${kase.id}.pdf`, `
+    <div class="paper">
+      <h3>Capa</h3>
+      <p><b>${esc(f.seguradora.v)}</b> × <b>${esc(f.causador.v)}</b><br>Ação regressiva de ressarcimento · Sinistro ${esc(f.sinistro.v)} · Apólice ${esc(f.apolice.v)}<br>Gerado em ${new Date().toLocaleDateString("pt-BR")}</p>
+      <h3>Índice</h3>
+      <table class="idx">${rows}</table>
+      <p class="note">${fl - 1} folhas no total. Cada documento tem folha separadora, marcador e carimbo "Doc. NN – fl. X/Y" no rodapé.</p>
+      ${missing().length ? `<p><span class="rev">FALTA: ${missing().map(m => LABEL[m]).join(", ")}</span></p>` : ""}
+    </div>`);
+}
+function showPeticao() {
+  const f = kase.facts, n = t => { const d = sortedDocs().find(d => d.type === t); return d ? docNum(d.id) : null; };
+  const ref = t => n(t) ? `(${n(t)})` : `<span class="rev">[[REVISAR: falta ${LABEL[t]}]]</span>`;
+  const v = x => `<span class="var">${esc(x)}</span>`;
+  openSheet(`peticao_${kase.id}.docx`, `
+    <div class="paper">
+      <p><b>EXCELENTÍSSIMO(A) SENHOR(A) DOUTOR(A) JUIZ(A) DE DIREITO DA __ VARA CÍVEL DA COMARCA DE <span class="rev">[[REVISAR: comarca]]</span></b></p>
+      <p>${v(f.seguradora.v.toUpperCase())}, pessoa jurídica de direito privado, por seus advogados ${ref("PROCURACAO")}, vem propor a presente</p>
+      <p style="text-align:center"><b>AÇÃO REGRESSIVA DE RESSARCIMENTO</b></p>
+      <p>em face de ${v(f.causador.v.toUpperCase())}, inscrita no CNPJ sob o nº ${v(f.cnpj.v)}, pelos fatos e fundamentos a seguir.</p>
+      <h3>I. Dos fatos</h3>
+      <p>A autora celebrou com ${v(f.segurado.v)} contrato de seguro de automóvel, apólice nº ${v(f.apolice.v)} ${ref("APOLICE")}. Em ${v(brDate(f.data_sinistro.v))}, na ${v(f.local.v)}, o veículo segurado foi atingido por veículo de propriedade da ré, conforme aviso de sinistro ${ref("AVISO_SINISTRO")} e boletim de ocorrência ${ref("BOLETIM_OCORRENCIA")}.</p>
+      <p>Os danos foram apurados em orçamento e nota fiscal de reparo ${ref("ORCAMENTO_NF_REPARO")} e registrados em fotografias ${ref("FOTOS")}. Em ${v(brDate(f.data_pag.v))}, a autora indenizou o segurado no valor de R$ ${v(f.valor.v)} ${ref("COMPROVANTE_PAGAMENTO")}, sub-rogando-se em seus direitos ${ref("TERMO_QUITACAO_SUBROGACAO")}.</p>
+      <h3>II. Do direito</h3>
+      <p>Paga a indenização, o segurador sub-roga-se, nos limites do valor respectivo, nos direitos e ações que competirem ao segurado contra o autor do dano (art. 786 do Código Civil). No mesmo sentido, a Súmula 188 do STF. A responsabilidade da ré decorre dos arts. 186 e 927 do Código Civil.</p>
+      <h3>III. Dos pedidos</h3>
+      <p>Requer a condenação da ré ao pagamento de R$ ${v(f.valor.v)}, com correção monetária desde o desembolso (Súmula 43/STJ) e juros de mora desde o evento danoso (Súmula 54/STJ), além de custas e honorários.</p>
+      <p>Dá-se à causa o valor de R$ ${v(f.valor.v)} <span class="rev">[[REVISAR: atualizar valor]]</span>.</p>
+    </div>`);
+}
+
+const SAMPLE = [
+  { name: "scan001.pdf", found: "Aviso de sinistro, Boletim de ocorrência e 1 página para conferir" },
+  { name: "doc final (2).pdf", found: "Orçamentos e NFs" },
+  { name: "apolice.pdf", found: "Apólice" },
+  { name: "comprovante TED.pdf", found: "Comprovante de pagamento" },
+  { name: "fotos_carro.pdf", found: "Fotos" },
+  { name: "procuracao_assinada.pdf", found: "Procuração" }
+];
+const GUESS = [[/procur/i, "Procuração"], [/apolic|apólic/i, "Apólice"], [/aviso/i, "Aviso de sinistro"], [/\bbo\b|boletim|ocorr/i, "Boletim de ocorrência"],
+  [/laudo|vistoria/i, "Laudo técnico"], [/or[cç]|\bnf|nota/i, "Orçamentos e NFs"], [/foto|img/i, "Fotos"], [/comprov|ted|pagam/i, "Comprovante de pagamento"],
+  [/termo|quita|sub-?rog/i, "Termo de quitação e sub-rogação"], [/ct-?e|dacte|transp/i, "Docs. de transporte"], [/crlv|cnh/i, "Docs. do veículo e condutor"]];
+let uploads = [];
+function viewCliente() {
+  return `<div class="client">
+    <div style="display:grid;gap:6px">
+      <span class="note mono">Escritório Prado &amp; Rocha · envio seguro</span>
+      <h1>Envie os documentos do sinistro 2025-0418</h1>
+      <p class="sub">Pode mandar os PDFs do jeito que estão, com qualquer nome. A gente separa e organiza. Se faltar algo, avisamos aqui mesmo.</p>
+    </div>
+    <div class="row"><label for="cScen">Tipo de sinistro</label>
+      <select id="cScen" class="field">${Object.entries(SCEN).map(([k, v]) => `<option value="${k}" ${k === kase.scenario ? "selected" : ""}>${v}</option>`).join("")}</select></div>
+    <label class="drop" id="drop" for="fileIn">
+      <b>Arraste os PDFs aqui ou clique para escolher</b>
+      <span>Vários arquivos de uma vez · até 50 MB cada</span>
+      <input id="fileIn" type="file" accept="application/pdf,.pdf" multiple hidden>
+    </label>
+    <div class="row"><button class="btn" id="sample">Usar PDFs de exemplo</button><span class="note">para ver a demonstração sem arquivos reais</span></div>
+    <ul class="files" id="files"></ul>
+    <div id="clientResult"></div>
+  </div>`;
+}
+function bindCliente() {
+  const drop = $("#drop"), inp = $("#fileIn");
+  inp.onchange = () => addFiles([...inp.files].map(f => ({ name: f.name })));
+  ["dragenter", "dragover"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add("over"); }));
+  ["dragleave", "drop"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove("over"); }));
+  drop.addEventListener("drop", e => addFiles([...e.dataTransfer.files].map(f => ({ name: f.name }))));
+  $("#sample").onclick = () => addFiles(SAMPLE.map(s => ({ ...s })));
+  $("#cScen").onchange = e => { kase.scenario = e.target.value; renderFiles(); };
+  renderFiles();
+}
+function addFiles(list) {
+  list.forEach(f => {
+    if (!f.found) { const g = GUESS.find(([re]) => re.test(f.name)); f.found = g ? g[1] : "Vamos conferir este arquivo"; }
+    f.p = 0; uploads.push(f);
+    const step = () => { f.p = Math.min(100, f.p + 20 + Math.random() * 25); renderFiles(); if (f.p < 100) setTimeout(step, 250 + Math.random() * 300); };
+    setTimeout(step, 150);
+  });
+  renderFiles();
+}
+function renderFiles() {
+  const ul = $("#files"); if (!ul) return;
+  ul.innerHTML = uploads.map(f => `<li><div class="top"><span class="nm">${esc(f.name)}</span>
+    ${f.p < 60 ? `<span class="pill p-mut">enviando</span>` : f.p < 100 ? `<span class="pill p-acc">lendo</span>` : `<span class="pill ${/conferir/.test(f.found) ? "p-warn" : "p-ok"}">recebido</span>`}</div>
+    <div class="bar"><i style="width:${f.p}%"></i></div>
+    ${f.p >= 100 ? `<div class="found">Encontramos: ${esc(f.found)}</div>` : ""}</li>`).join("");
+  const done = uploads.length && uploads.every(f => f.p >= 100);
+  const res = $("#clientResult");
+  if (!done) { res.innerHTML = ""; return; }
+  const all = uploads.map(f => f.found).join(" ");
+  const miss = required(kase.scenario).filter(t => !all.includes(LABEL[t]));
+  res.innerHTML = miss.length
+    ? `<div class="alert a-warn"><b>Recebemos ${uploads.length} arquivo(s). Ainda falta:</b><span>${miss.map(m => LABEL[m]).join(", ")}.</span><span>Se tiver, envie por aqui mesmo. O escritório já foi avisado do que chegou.</span></div>`
+    : `<div class="alert a-ok"><b>Tudo certo. Recebemos todos os documentos necessários.</b><span>O escritório vai revisar e entrar em contato.</span></div>`;
+}
+
+const VIEWS = { cliente: [viewCliente, bindCliente], casos: [viewCasos, bindCasos], caso: [viewCaso, bindCaso] };
+function render() {
+  const v = VIEWS[location.hash.slice(1)] ? location.hash.slice(1) : "casos";
+  const y = window.scrollY;
+  $("#app").innerHTML = VIEWS[v][0](); VIEWS[v][1]();
+  document.querySelectorAll("nav a").forEach(a => { if (a.dataset.view === v) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
+  window.scrollTo(0, render.last === v ? y : 0);
+  render.last = v;
+}
+window.addEventListener("hashchange", render);
+render();
+</script>

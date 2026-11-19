@@ -1,0 +1,269 @@
+{
+  "scenario": "AUTO",
+  "files": {
+    "scan001.pdf": {
+      "duplicate_of": null,
+      "pages": [
+        {
+          "page": 0,
+          "doc_type": "APOLICE",
+          "is_first_page_of_new_doc": true
+        },
+        {
+          "page": 1,
+          "doc_type": "APOLICE",
+          "is_first_page_of_new_doc": false
+        }
+      ]
+    },
+    "doc final (2).pdf": {
+      "duplicate_of": null,
+      "pages": [
+        {
+          "page": 0,
+          "doc_type": "AVISO_SINISTRO",
+          "is_first_page_of_new_doc": true
+        },
+        {
+          "page": 1,
+          "doc_type": "BOLETIM_OCORRENCIA",
+          "is_first_page_of_new_doc": true
+        },
+        {
+          "page": 2,
+          "doc_type": "BOLETIM_OCORRENCIA",
+          "is_first_page_of_new_doc": false
+        },
+        {
+          "page": 3,
+          "doc_type": "FOTOS",
+          "is_first_page_of_new_doc": true
+        }
+      ]
+    },
+    "procuracao assinada.pdf": {
+      "duplicate_of": null,
+      "pages": [
+        {
+          "page": 0,
+          "doc_type": "PROCURACAO",
+          "is_first_page_of_new_doc": true
+        }
+      ]
+    },
+    "estatuto+ata.pdf": {
+      "duplicate_of": null,
+      "pages": [
+        {
+          "page": 0,
+          "doc_type": "DOCS_SEGURADORA",
+          "is_first_page_of_new_doc": true
+        },
+        {
+          "page": 1,
+          "doc_type": "DOCS_SEGURADORA",
+          "is_first_page_of_new_doc": false
+        }
+      ]
+    },
+    "IMG_20231121_vistoria.pdf": {
+      "duplicate_of": null,
+      "pages": [
+        {
+          "page": 0,
+          "doc_type": "LAUDO_TECNICO",
+          "is_first_page_of_new_doc": true
+        }
+      ]
+    },
+    "orcamento oficina.pdf": {
+      "duplicate_of": null,
+      "pages": [
+        {
+          "page": 0,
+          "doc_type": "ORCAMENTO_NF_REPARO",
+          "is_first_page_of_new_doc": true
+        }
+      ]
+    },
+    "comprovante.pdf": {
+      "duplicate_of": null,
+      "pages": [
+        {
+          "page": 0,
+          "doc_type": "COMPROVANTE_PAGAMENTO",
+          "is_first_page_of_new_doc": true
+        }
+      ]
+    },
+    "WhatsApp Image 2023-11-20 docs.pdf": {
+      "duplicate_of": null,
+      "pages": [
+        {
+          "page": 0,
+          "doc_type": "DOCS_VEICULO_CONDUTOR",
+          "is_first_page_of_new_doc": true
+        },
+        {
+          "page": 1,
+          "doc_type": "DOCS_VEICULO_CONDUTOR",
+          "is_first_page_of_new_doc": false
+        }
+      ]
+    },
+    "notificacao.pdf": {
+      "duplicate_of": null,
+      "pages": [
+        {
+          "page": 0,
+          "doc_type": "RECLAMACAO_ADMINISTRATIVA",
+          "is_first_page_of_new_doc": true
+        }
+      ]
+    },
+    "comprovante (1).pdf": {
+      "duplicate_of": "comprovante.pdf",
+      "pages": [
+        {
+          "page": 0,
+          "doc_type": "COMPROVANTE_PAGAMENTO",
+          "is_first_page_of_new_doc": true
+        }
+      ]
+    }
+  },
+  "duplicates": {
+    "comprovante (1).pdf": "comprovante.pdf"
+  },
+  "missing_doc_types": [
+    "TERMO_QUITACAO_SUBROGACAO"
+  ],
+  "conflicts": [
+    {
+      "field": "valor_pago",
+      "values": [
+        "48320.00",
+        "48230.00"
+      ],
+      "sources": [
+        "comprovante.pdf",
+        "orcamento oficina.pdf"
+      ]
+    }
+  ],
+  "logical_docs": [
+    {
+      "file": "scan001.pdf",
+      "doc_type": "APOLICE",
+      "title": "Apólice de seguro auto nº 01.31.0098765",
+      "pages": [
+        0,
+        1
+      ]
+    },
+    {
+      "file": "doc final (2).pdf",
+      "doc_type": "AVISO_SINISTRO",
+      "title": "Aviso de sinistro nº AUT-2023-0045871",
+      "pages": [
+        0
+      ]
+    },
+    {
+      "file": "doc final (2).pdf",
+      "doc_type": "BOLETIM_OCORRENCIA",
+      "title": "Boletim de ocorrência nº 4521/2023",
+      "pages": [
+        1,
+        2
+      ]
+    },
+    {
+      "file": "doc final (2).pdf",
+      "doc_type": "FOTOS",
+      "title": "Registro fotográfico das avarias",
+      "pages": [
+        3
+      ]
+    },
+    {
+      "file": "procuracao assinada.pdf",
+      "doc_type": "PROCURACAO",
+      "title": "Procuração ad judicia",
+      "pages": [
+        0
+      ]
+    },
+    {
+      "file": "estatuto+ata.pdf",
+      "doc_type": "DOCS_SEGURADORA",
+      "title": "Estatuto social e ata de eleição da diretoria",
+      "pages": [
+        0,
+        1
+      ]
+    },
+    {
+      "file": "IMG_20231121_vistoria.pdf",
+      "doc_type": "LAUDO_TECNICO",
+      "title": "Laudo de vistoria e regulação",
+      "pages": [
+        0
+      ]
+    },
+    {
+      "file": "orcamento oficina.pdf",
+      "doc_type": "ORCAMENTO_NF_REPARO",
+      "title": "Orçamento de reparo – R$ 48.230,00",
+      "pages": [
+        0
+      ]
+    },
+    {
+      "file": "comprovante.pdf",
+      "doc_type": "COMPROVANTE_PAGAMENTO",
+      "title": "Comprovante de TED – R$ 48.320,00",
+      "pages": [
+        0
+      ]
+    },
+    {
+      "file": "WhatsApp Image 2023-11-20 docs.pdf",
+      "doc_type": "DOCS_VEICULO_CONDUTOR",
+      "title": "CRLV e CNH do segurado",
+      "pages": [
+        0,
+        1
+      ]
+    },
+    {
+      "file": "notificacao.pdf",
+      "doc_type": "RECLAMACAO_ADMINISTRATIVA",
+      "title": "Notificação extrajudicial ao causador",
+      "pages": [
+        0
+      ]
+    }
+  ],
+  "facts": {
+    "scenario": "AUTO",
+    "seguradora_nome": "Aurora Companhia de Seguros S.A.",
+    "seguradora_cnpj": "11.222.333/0001-81",
+    "segurado_nome": "Rafael Augusto Nogueira",
+    "segurado_cpf_cnpj": "123.456.789-09",
+    "apolice_numero": "01.31.0098765",
+    "apolice_vigencia_inicio": "2023-03-10",
+    "apolice_vigencia_fim": "2024-03-10",
+    "apolice_ramo": "Automóvel",
+    "sinistro_numero": "AUT-2023-0045871",
+    "sinistro_data": "2023-11-18",
+    "sinistro_local": "Av. Rebouças, 1500, Pinheiros, São Paulo/SP",
+    "causador_nome": "Bruno César Albuquerque",
+    "causador_cpf_cnpj": "987.654.321-00",
+    "causador_endereco": "Rua Harmonia, 77, Vila Madalena, São Paulo/SP",
+    "causador_placa": "FIC-2B34",
+    "valor_pago": "48320.00",
+    "data_pagamento": "2023-12-24",
+    "franquia": "3850.00"
+  }
+}

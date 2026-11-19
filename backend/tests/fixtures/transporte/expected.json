@@ -1,0 +1,249 @@
+{
+  "scenario": "TRANSPORTE",
+  "files": {
+    "scan 14-08.pdf": {
+      "duplicate_of": null,
+      "pages": [
+        {
+          "page": 0,
+          "doc_type": "APOLICE",
+          "is_first_page_of_new_doc": true
+        }
+      ]
+    },
+    "CTE_NF.pdf": {
+      "duplicate_of": null,
+      "pages": [
+        {
+          "page": 0,
+          "doc_type": "DOCS_TRANSPORTE",
+          "is_first_page_of_new_doc": true
+        },
+        {
+          "page": 1,
+          "doc_type": "DOCS_TRANSPORTE",
+          "is_first_page_of_new_doc": false
+        }
+      ]
+    },
+    "docs recebimento.pdf": {
+      "duplicate_of": null,
+      "pages": [
+        {
+          "page": 0,
+          "doc_type": "DOCS_TRANSPORTE",
+          "is_first_page_of_new_doc": true
+        },
+        {
+          "page": 1,
+          "doc_type": "BOLETIM_OCORRENCIA",
+          "is_first_page_of_new_doc": true
+        },
+        {
+          "page": 2,
+          "doc_type": "LAUDO_TECNICO",
+          "is_first_page_of_new_doc": true
+        },
+        {
+          "page": 3,
+          "doc_type": "LAUDO_TECNICO",
+          "is_first_page_of_new_doc": false
+        }
+      ]
+    },
+    "pagamento indenizacao.pdf": {
+      "duplicate_of": null,
+      "pages": [
+        {
+          "page": 0,
+          "doc_type": "COMPROVANTE_PAGAMENTO",
+          "is_first_page_of_new_doc": true
+        }
+      ]
+    },
+    "termo sub-rogacao assinado.pdf": {
+      "duplicate_of": null,
+      "pages": [
+        {
+          "page": 0,
+          "doc_type": "TERMO_QUITACAO_SUBROGACAO",
+          "is_first_page_of_new_doc": true
+        }
+      ]
+    },
+    "procuração.pdf": {
+      "duplicate_of": null,
+      "pages": [
+        {
+          "page": 0,
+          "doc_type": "PROCURACAO",
+          "is_first_page_of_new_doc": true
+        }
+      ]
+    },
+    "seguradora docs.pdf": {
+      "duplicate_of": null,
+      "pages": [
+        {
+          "page": 0,
+          "doc_type": "DOCS_SEGURADORA",
+          "is_first_page_of_new_doc": true
+        },
+        {
+          "page": 1,
+          "doc_type": "DOCS_SEGURADORA",
+          "is_first_page_of_new_doc": false
+        }
+      ]
+    },
+    "Fotos carga.pdf": {
+      "duplicate_of": null,
+      "pages": [
+        {
+          "page": 0,
+          "doc_type": "FOTOS",
+          "is_first_page_of_new_doc": true
+        }
+      ]
+    },
+    "CTE_NF - Copia.pdf": {
+      "duplicate_of": "CTE_NF.pdf",
+      "pages": [
+        {
+          "page": 0,
+          "doc_type": "DOCS_TRANSPORTE",
+          "is_first_page_of_new_doc": true
+        },
+        {
+          "page": 1,
+          "doc_type": "DOCS_TRANSPORTE",
+          "is_first_page_of_new_doc": false
+        }
+      ]
+    }
+  },
+  "duplicates": {
+    "CTE_NF - Copia.pdf": "CTE_NF.pdf"
+  },
+  "missing_doc_types": [
+    "AVISO_SINISTRO"
+  ],
+  "conflicts": [
+    {
+      "field": "valor_pago",
+      "values": [
+        "187450.00",
+        "187540.00"
+      ],
+      "sources": [
+        "pagamento indenizacao.pdf",
+        "termo sub-rogacao assinado.pdf"
+      ]
+    }
+  ],
+  "logical_docs": [
+    {
+      "file": "scan 14-08.pdf",
+      "doc_type": "APOLICE",
+      "title": "Apólice de transporte nacional nº 54.21.0003301",
+      "pages": [
+        0
+      ]
+    },
+    {
+      "file": "CTE_NF.pdf",
+      "doc_type": "DOCS_TRANSPORTE",
+      "title": "CT-e nº 88412 e DANFE da mercadoria",
+      "pages": [
+        0,
+        1
+      ]
+    },
+    {
+      "file": "docs recebimento.pdf",
+      "doc_type": "DOCS_TRANSPORTE",
+      "title": "Termo de avaria e ressalvas no recebimento",
+      "pages": [
+        0
+      ]
+    },
+    {
+      "file": "docs recebimento.pdf",
+      "doc_type": "BOLETIM_OCORRENCIA",
+      "title": "Boletim de ocorrência rodoviário",
+      "pages": [
+        1
+      ]
+    },
+    {
+      "file": "docs recebimento.pdf",
+      "doc_type": "LAUDO_TECNICO",
+      "title": "Relatório de regulação do sinistro de transporte",
+      "pages": [
+        2,
+        3
+      ]
+    },
+    {
+      "file": "pagamento indenizacao.pdf",
+      "doc_type": "COMPROVANTE_PAGAMENTO",
+      "title": "Comprovante de TED – R$ 187.450,00",
+      "pages": [
+        0
+      ]
+    },
+    {
+      "file": "termo sub-rogacao assinado.pdf",
+      "doc_type": "TERMO_QUITACAO_SUBROGACAO",
+      "title": "Termo de quitação e sub-rogação",
+      "pages": [
+        0
+      ]
+    },
+    {
+      "file": "procuração.pdf",
+      "doc_type": "PROCURACAO",
+      "title": "Procuração ad judicia",
+      "pages": [
+        0
+      ]
+    },
+    {
+      "file": "seguradora docs.pdf",
+      "doc_type": "DOCS_SEGURADORA",
+      "title": "Estatuto social e ata de eleição da diretoria",
+      "pages": [
+        0,
+        1
+      ]
+    },
+    {
+      "file": "Fotos carga.pdf",
+      "doc_type": "FOTOS",
+      "title": "Fotos da carga avariada",
+      "pages": [
+        0
+      ]
+    }
+  ],
+  "facts": {
+    "scenario": "TRANSPORTE",
+    "seguradora_nome": "Aurora Companhia de Seguros S.A.",
+    "seguradora_cnpj": "11.222.333/0001-81",
+    "segurado_nome": "Distribuidora Horizonte de Eletrônicos Ltda.",
+    "segurado_cpf_cnpj": "22.333.444/0001-55",
+    "apolice_numero": "54.21.0003301",
+    "apolice_vigencia_inicio": "2024-01-01",
+    "apolice_vigencia_fim": "2025-01-01",
+    "apolice_ramo": "Transporte nacional",
+    "sinistro_numero": "TRN-2024-0007731",
+    "sinistro_data": "2024-08-05",
+    "sinistro_local": "BR-116, km 420, Feira de Santana/BA",
+    "causador_nome": "Rodovias Rápidas Transportes Ltda.",
+    "causador_cpf_cnpj": "66.777.888/0001-99",
+    "causador_endereco": "Rod. Anhanguera, km 105, Galpão 3, Sumaré/SP",
+    "causador_placa": "TRK-9C87",
+    "valor_pago": "187450.00",
+    "data_pagamento": "2024-10-02"
+  }
+}

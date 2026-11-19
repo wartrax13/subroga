@@ -1,0 +1,244 @@
+{
+  "scenario": "ELETRICO",
+  "files": {
+    "scan_0001.pdf": {
+      "duplicate_of": null,
+      "pages": [
+        {
+          "page": 0,
+          "doc_type": "APOLICE",
+          "is_first_page_of_new_doc": true
+        }
+      ]
+    },
+    "documentos sinistro.pdf": {
+      "duplicate_of": null,
+      "pages": [
+        {
+          "page": 0,
+          "doc_type": "AVISO_SINISTRO",
+          "is_first_page_of_new_doc": true
+        },
+        {
+          "page": 1,
+          "doc_type": "FOTOS",
+          "is_first_page_of_new_doc": true
+        },
+        {
+          "page": 2,
+          "doc_type": "ORCAMENTO_NF_REPARO",
+          "is_first_page_of_new_doc": true
+        },
+        {
+          "page": 3,
+          "doc_type": "ORCAMENTO_NF_REPARO",
+          "is_first_page_of_new_doc": false
+        }
+      ]
+    },
+    "ted.pdf": {
+      "duplicate_of": null,
+      "pages": [
+        {
+          "page": 0,
+          "doc_type": "COMPROVANTE_PAGAMENTO",
+          "is_first_page_of_new_doc": true
+        }
+      ]
+    },
+    "recibo quitacao.pdf": {
+      "duplicate_of": null,
+      "pages": [
+        {
+          "page": 0,
+          "doc_type": "TERMO_QUITACAO_SUBROGACAO",
+          "is_first_page_of_new_doc": true
+        }
+      ]
+    },
+    "procuracao.pdf": {
+      "duplicate_of": null,
+      "pages": [
+        {
+          "page": 0,
+          "doc_type": "PROCURACAO",
+          "is_first_page_of_new_doc": true
+        }
+      ]
+    },
+    "doc seguradora.pdf": {
+      "duplicate_of": null,
+      "pages": [
+        {
+          "page": 0,
+          "doc_type": "DOCS_SEGURADORA",
+          "is_first_page_of_new_doc": true
+        },
+        {
+          "page": 1,
+          "doc_type": "DOCS_SEGURADORA",
+          "is_first_page_of_new_doc": false
+        }
+      ]
+    },
+    "aneel protocolo.pdf": {
+      "duplicate_of": null,
+      "pages": [
+        {
+          "page": 0,
+          "doc_type": "RECLAMACAO_ADMINISTRATIVA",
+          "is_first_page_of_new_doc": true
+        },
+        {
+          "page": 1,
+          "doc_type": "RECLAMACAO_ADMINISTRATIVA",
+          "is_first_page_of_new_doc": false
+        }
+      ]
+    },
+    "Novo Documento 2025-03-12.pdf": {
+      "duplicate_of": null,
+      "pages": [
+        {
+          "page": 0,
+          "doc_type": "OUTROS",
+          "is_first_page_of_new_doc": true
+        }
+      ]
+    },
+    "ted (2).pdf": {
+      "duplicate_of": "ted.pdf",
+      "pages": [
+        {
+          "page": 0,
+          "doc_type": "COMPROVANTE_PAGAMENTO",
+          "is_first_page_of_new_doc": true
+        }
+      ]
+    }
+  },
+  "duplicates": {
+    "ted (2).pdf": "ted.pdf"
+  },
+  "missing_doc_types": [
+    "LAUDO_TECNICO"
+  ],
+  "conflicts": [
+    {
+      "field": "valor_pago",
+      "values": [
+        "12870.00",
+        "12780.00"
+      ],
+      "sources": [
+        "ted.pdf",
+        "recibo quitacao.pdf"
+      ]
+    }
+  ],
+  "logical_docs": [
+    {
+      "file": "scan_0001.pdf",
+      "doc_type": "APOLICE",
+      "title": "Apólice de seguro residencial nº 14.18.0045512",
+      "pages": [
+        0
+      ]
+    },
+    {
+      "file": "documentos sinistro.pdf",
+      "doc_type": "AVISO_SINISTRO",
+      "title": "Aviso de sinistro nº RES-2025-0012093",
+      "pages": [
+        0
+      ]
+    },
+    {
+      "file": "documentos sinistro.pdf",
+      "doc_type": "FOTOS",
+      "title": "Fotos dos equipamentos danificados",
+      "pages": [
+        1
+      ]
+    },
+    {
+      "file": "documentos sinistro.pdf",
+      "doc_type": "ORCAMENTO_NF_REPARO",
+      "title": "Orçamentos de assistência técnica",
+      "pages": [
+        2,
+        3
+      ]
+    },
+    {
+      "file": "ted.pdf",
+      "doc_type": "COMPROVANTE_PAGAMENTO",
+      "title": "Comprovante de TED – R$ 12.870,00",
+      "pages": [
+        0
+      ]
+    },
+    {
+      "file": "recibo quitacao.pdf",
+      "doc_type": "TERMO_QUITACAO_SUBROGACAO",
+      "title": "Termo de quitação e sub-rogação",
+      "pages": [
+        0
+      ]
+    },
+    {
+      "file": "procuracao.pdf",
+      "doc_type": "PROCURACAO",
+      "title": "Procuração ad judicia",
+      "pages": [
+        0
+      ]
+    },
+    {
+      "file": "doc seguradora.pdf",
+      "doc_type": "DOCS_SEGURADORA",
+      "title": "Estatuto social e ata de eleição da diretoria",
+      "pages": [
+        0,
+        1
+      ]
+    },
+    {
+      "file": "aneel protocolo.pdf",
+      "doc_type": "RECLAMACAO_ADMINISTRATIVA",
+      "title": "Pedido de ressarcimento à concessionária e resposta",
+      "pages": [
+        0,
+        1
+      ]
+    },
+    {
+      "file": "Novo Documento 2025-03-12.pdf",
+      "doc_type": "OUTROS",
+      "title": "E-mail de encaminhamento",
+      "pages": [
+        0
+      ]
+    }
+  ],
+  "facts": {
+    "scenario": "ELETRICO",
+    "seguradora_nome": "Aurora Companhia de Seguros S.A.",
+    "seguradora_cnpj": "11.222.333/0001-81",
+    "segurado_nome": "Mariana Lopes Carvalho",
+    "segurado_cpf_cnpj": "321.654.987-11",
+    "apolice_numero": "14.18.0045512",
+    "apolice_vigencia_inicio": "2024-06-01",
+    "apolice_vigencia_fim": "2025-06-01",
+    "apolice_ramo": "Compreensivo residencial",
+    "sinistro_numero": "RES-2025-0012093",
+    "sinistro_data": "2025-01-20",
+    "sinistro_local": "Rua dos Ipês, 88, Jardim das Flores, Campinas/SP",
+    "causador_nome": "Companhia Paulista de Distribuição de Energia – CPDE (fictícia)",
+    "causador_cpf_cnpj": "44.555.666/0001-02",
+    "causador_endereco": "Rua da Energia, 500, Centro, Campinas/SP",
+    "valor_pago": "12870.00",
+    "data_pagamento": "2025-03-10",
+    "franquia": "500.00"
+  }
+}
